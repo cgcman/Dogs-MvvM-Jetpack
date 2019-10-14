@@ -46,6 +46,13 @@ class ListFragment : Fragment() {
             adapter = dogsListAdapter
         }
 
+        refreshLayout.setOnRefreshListener {
+            dogsList.visibility = View.GONE
+            listError.visibility = View.GONE
+            progresBar.visibility = View.VISIBLE
+            refreshLayout.isRefreshing = false
+        }
+
         observeViewModel()
     }
 
@@ -54,6 +61,22 @@ class ListFragment : Fragment() {
             dogs?.let {
                 dogsList.visibility = View.VISIBLE
                 dogsListAdapter.updateDogList(dogs)
+            }
+        })
+
+        viewModel.dogsLoadError.observe(this, Observer { isError ->
+            isError?.let {
+                listError.visibility = if(it) View.VISIBLE else View.GONE
+            }
+        })
+
+        viewModel.loading.observe(this, Observer { isLoading ->
+            isLoading?.let {
+                progresBar.visibility = if(it) View.VISIBLE else View.GONE
+                if(it){
+                    listError.visibility = View.GONE
+                    dogsList.visibility = View.GONE
+                }
             }
         })
     }

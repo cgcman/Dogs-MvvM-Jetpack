@@ -3,9 +3,13 @@ package com.grdj.dogs.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.grdj.dogs.R
 import com.grdj.dogs.model.DogBreed
+import com.grdj.dogs.util.getProgressDrawable
+import com.grdj.dogs.util.loadImage
 import kotlinx.android.synthetic.main.item_dog.view.*
 
 class DogListAdapter(val dogList: ArrayList<DogBreed> ):
@@ -22,6 +26,10 @@ class DogListAdapter(val dogList: ArrayList<DogBreed> ):
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         holder.view.name.text = dogList[position].dogBreed
         holder.view.lifespan.text = dogList[position].lifeSpn
+        holder.view.setOnClickListener {
+            Navigation.findNavController(it).navigate(ListFragmentDirections.actionDetailFragment())
+        }
+        holder.view.imageView.loadImage(dogList[position].imageUrl, getProgressDrawable(holder.view.imageView.context))
     }
 
     fun updateDogList(newDogList:List<DogBreed>){
