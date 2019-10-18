@@ -1,8 +1,10 @@
 package com.grdj.dogs.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.grdj.dogs.model.DogBreed
+import com.grdj.dogs.model.DogDatabase
 import com.grdj.dogs.model.DogsApiService
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -10,8 +12,9 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
-class listViewModel: ViewModel() {
+class listViewModel(application: Application): BaseViewModel(application) {
     private val dogsService = DogsApiService()
     private val disposable = CompositeDisposable()
 
@@ -31,9 +34,11 @@ class listViewModel: ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<DogBreed>>(){
                     override fun onSuccess(dogList : List<DogBreed>) {
-                        dogs.value = dogList
+                        /*dogs.value = dogList
                         dogsLoadError.value = false
-                        loading.value = false
+                        loading.value = false*/
+                        storeDogsLocaly(dogList)
+                        //dogsRetrieve(dogList)
                     }
 
                     override fun onError(e: Throwable) {
@@ -43,6 +48,18 @@ class listViewModel: ViewModel() {
                     }
                 })
         )
+    }
+
+    private fun dogsRetrieve(dogList : List<DogBreed>){
+        dogs.value = dogList
+        dogsLoadError.value = false
+        loading.value = false
+    }
+
+    private fun storeDogsLocaly(dogList : List<DogBreed>){
+        launch {
+            DogDatabase(getApplication()).dog
+        }
     }
 
     override fun onCleared() {
