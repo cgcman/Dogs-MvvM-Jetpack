@@ -8,7 +8,9 @@ import androidx.room.RoomDatabase
 @Database(entities = arrayOf(DogBreed::class), version = 1)
 abstract class DogDatabase: RoomDatabase(){
 
-    abstract class dogDao(): DogDao
+    abstract fun dogDao(): DogDao
+
+    //abstract class dogDao(): DogDao
 
     companion object{
         @Volatile private var instance: DogDatabase? = null
