@@ -2,7 +2,7 @@
 
 # Dogs - Dogs list App
 
-### Simple Test application that shows a list of dogs and litle detail info
+### Simple Test application that shows a list of dogs and little detail info
 
 #### Use:<br>
 MVVM architecture<br>
